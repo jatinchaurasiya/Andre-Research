@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Andre — PMF Agent Orchestra</title>
+<link rel="stylesheet" href="/static/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+<div class="dash">
+
+  <!-- Header -->
+  <header class="hdr">
+    <span class="logo">ANDRE</span>
+    <span class="logo-sub">PMF Agent Orchestra</span>
+
+    <button class="run-sel" id="run-sel" type="button" aria-haspopup="listbox">
+      <span class="run-sel-icon">↺</span>
+      <span id="run-sel-label">—</span>
+      <span class="run-sel-chev">▾</span>
+    </button>
+    <div class="run-sel-menu" id="run-sel-menu" hidden></div>
+
+    <div class="hdr-spacer"></div>
+
+    <span class="status-pill" id="status-pill"><span class="sp-dot"></span><span id="status-text">idle</span></span>
+    <button class="stop-btn" id="stop-btn" type="button" title="Stop the current pipeline">■ Stop</button>
+    <button class="new-btn" id="new-btn" type="button" title="Restart from the terminal">+ New Search</button>
+  </header>
+
+  <!-- Phase progress bar -->
+  <div class="phase-bar" id="phase-bar"></div>
+
+  <!-- Metrics row -->
+  <section class="metrics" id="metrics">
+    <div class="m-card">
+      <div class="m-label">Σ Tokens</div>
+      <div class="m-val green" id="m-tok">0</div>
+      <div class="m-sub">in + out</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">🧠 Thinking</div>
+      <div class="m-val violet" id="m-think">0</div>
+      <div class="m-sub">reasoning tokens</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">🔍 Searches</div>
+      <div class="m-val amber" id="m-srch">0</div>
+      <div class="m-sub">DDG queries</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">📄 Pages</div>
+      <div class="m-val" id="m-pages">0</div>
+      <div class="m-sub">pages fetched</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">✓ Done</div>
+      <div class="m-val" id="m-done">0 <span class="m-denom">/ 8</span></div>
+      <div class="m-sub">agents complete</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">⏱ Elapsed</div>
+      <div class="m-val" id="m-time">00:00</div>
+      <div class="m-sub">since start</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">⧗ ETA</div>
+      <div class="m-val amber" id="m-eta">—</div>
+      <div class="m-sub">estimated left</div>
+    </div>
+    <div class="m-card">
+      <div class="m-label">⚠ Errors</div>
+      <div class="m-val pink" id="m-err">0</div>
+      <div class="m-sub">stream + tool</div>
+    </div>
+  </section>
+
+  <!-- Body -->
+  <div class="body">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sb-section">Agents</div>
+      <div id="agent-list"></div>
+      <div class="sb-footer">
+        <div class="sb-footer-title">Parallel phases</div>
+        <div class="sb-footer-text">P2a + P2b run simultaneously. All others sequential.</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+      <!-- Tabs -->
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="log">Live Log</button>
+        <button class="tab" data-tab="research">Research Intel</button>
+        <button class="tab" data-tab="tokens">Token Economics</button>
+        <button class="tab" data-tab="searches">Search Log</button>
+        <button class="tab" data-tab="outputs">Outputs</button>
+        <button class="tab" data-tab="history">Apps Library</button>
+      </div>
+
+      <div class="content">
+
+        <!-- LIVE LOG -->
+        <section class="panel active" data-panel="log">
+          <div class="log-controls">
+            <label class="ck"><input type="checkbox" id="ck-thinking" checked> Show thinking</label>
+            <label class="ck"><input type="checkbox" id="ck-text" checked> Show text</label>
+            <label class="ck"><input type="checkbox" id="ck-search" checked> Show searches</label>
+            <label class="ck"><input type="checkbox" id="ck-autoscroll" checked> Auto-scroll</label>
+            <span class="legend-inline" id="legend-inline"></span>
+          </div>
+          <div class="log-area" id="log-area"></div>
+        </section>
+
+        <!-- RESEARCH INTEL -->
+        <section class="panel" data-panel="research">
+          <div class="res-grid">
+            <div class="res-card">
+              <div class="rc-title">PMF Scores — Winner</div>
+              <div class="rc-items" id="pmf-scores">
+                <div class="rc-empty">PMF agent has not completed yet.</div>
+              </div>
+            </div>
+            <div class="res-card">
+              <div class="rc-title">Pipeline Snapshot</div>
+              <div class="rc-items" id="pipeline-snapshot"></div>
+            </div>
+            <div class="res-card">
+              <div class="rc-title">Per-Agent Metrics</div>
+              <div class="rc-items" id="agent-metrics"></div>
+            </div>
+            <div class="res-card">
+              <div class="rc-title">Winner Brief</div>
+              <div class="rc-items" id="winner-brief">
+                <div class="rc-empty">Winner data appears once PMF completes.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TOKEN ECONOMICS -->
+        <section class="panel" data-panel="tokens">
+          <div class="tok-totals" id="tok-totals"></div>
+          <div class="tok-grid" id="tok-grid"></div>
+        </section>
+
+        <!-- SEARCH LOG -->
+        <section class="panel" data-panel="searches">
+          <div class="search-empty" id="search-empty">No searches yet.</div>
+          <table class="search-table" id="search-table" hidden>
+            <thead>
+              <tr><th>Time</th><th>Agent</th><th>Query</th><th>Results</th><th>Pages</th></tr>
+            </thead>
+            <tbody id="search-tbody"></tbody>
+          </table>
+        </section>
+
+        <!-- OUTPUTS -->
+        <section class="panel" data-panel="outputs">
+          <div class="out-chips" id="out-chips"></div>
+          <div class="out-viewer" id="out-viewer">
+            <div class="empty">Click a completed output above to view it.</div>
+          </div>
+        </section>
+
+        <!-- APPS LIBRARY (formerly Run History) -->
+        <section class="panel" data-panel="history">
+          <div class="hist-head">
+            <span class="hist-info" id="hist-info">Loading apps library…</span>
+            <div class="hist-head-actions">
+              <button class="hist-refresh" id="hist-refresh" type="button">⟳ Refresh</button>
+              <button class="hist-new" id="hist-new" type="button">+ Start New Run</button>
+            </div>
+          </div>
+          <div class="hist-cards" id="hist-tbody"></div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

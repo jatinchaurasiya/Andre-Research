@@ -1,0 +1,54 @@
+model: "moonshotai/kimi-k2.6"
+base_url: "https://integrate.api.nvidia.com/v1"
+max_tokens: 16384
+temperature: 1.0
+top_p: 1.0
+thinking: true
+dashboard_port: 7860
+
+# Date reference constants — used by prompts for recency scoring.
+data_recency_year: 2026
+data_fresh_threshold: "2025-01-01"
+data_stale_threshold: "2024-01-01"
+
+agents:
+  pmf:
+    name: "PMF Research Agent"
+    phase: 1
+    color: "#5DCAA5"
+    max_search_queries: 12
+  requirements:
+    name: "Requirements Agent"
+    phase: "2a"
+    color: "#7F77DD"
+    max_search_queries: 6
+  competitor:
+    name: "Competitor Analysis Agent"
+    phase: "2b"
+    color: "#EF9F27"
+    max_search_queries: 15
+  improvement:
+    name: "Improvement Agent"
+    phase: 3
+    color: "#D85A30"
+    max_search_queries: 4
+  feature_architecture:
+    name: "Feature Architecture Agent"
+    phase: 4
+    color: "#3B82F6"
+    max_search_queries: 5
+  prd:
+    name: "PRD Agent"
+    phase: 5
+    color: "#8B5CF6"
+    max_search_queries: 0
+  uiux:
+    name: "UI/UX Design Prompt Agent"
+    phase: 6
+    color: "#EC4899"
+    max_search_queries: 6
+  marketing:
+    name: "Marketing Agent"
+    phase: 7
+    color: "#D4537E"
+    max_search_queries: 10
