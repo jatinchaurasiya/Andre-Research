@@ -247,7 +247,7 @@ section in order. Hand it to a dev / designer and they can start building.
 `config.yaml` controls model parameters and per-agent search budgets:
 
 ```yaml
-model: "moonshotai/kimi-k2.6"
+model: "moonshotai/kimi-k2.6" any model Available on the Nvidia NIM
 base_url: "https://integrate.api.nvidia.com/v1"
 max_tokens: 16384
 temperature: 1.0
