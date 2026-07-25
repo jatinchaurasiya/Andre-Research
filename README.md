@@ -5,7 +5,7 @@
 > version, drafts a PRD, generates UI/UX prompts, and produces a zero-budget
 > marketing playbook — all from a single `python orchestrator.py` command.
 
-Powered by `moonshotai/kimi-k2.6` on the free NVIDIA NIM endpoint. Every
+Powered by `the free NVIDIA NIM endpoint. Every
 thinking-token, output-token, and web-search call streams in real time to a
 local dashboard at <http://localhost:7860>.
 
