@@ -83,7 +83,7 @@ You need three things:
 1. **Python 3.11 or newer** — check with `python --version`.
 2. **Git** — to clone the repo.
 3. **A free NVIDIA NIM API key** — sign up at
-   <https://build.nvidia.com>, search for `kimi-k2.6`, and copy the key
+   <https://build.nvidia.com>, search for `Any Opensource Model`, and copy the key
    from the "Get API Key" panel. The hosted endpoint is
    `https://integrate.api.nvidia.com/v1`.
 
